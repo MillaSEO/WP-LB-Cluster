@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - wp1
+      - wp2
+  wp1:
+    image: wordpress:latest
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: user
+      WORDPRESS_DB_PASSWORD: 123
+      WORDPRESS_DB_NAME: wordpress
+      AUTH_KEY: 'secret123'
+      SECURE_AUTH_KEY: 'secret123'
+      LOGGED_IN_KEY: 'secret123'
+    volumes:
+      - ./wp_data:/var/www/html/wp-content/uploads
+  wp2:
+    image: wordpress:latest
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: user
+      WORDPRESS_DB_PASSWORD: 123
+      WORDPRESS_DB_NAME: wordpress
+      AUTH_KEY: 'secret123'
+      SECURE_AUTH_KEY: 'secret123'
+      LOGGED_IN_KEY: 'secret123'
+    volumes:
+      - ./wp_data:/var/www/html/wp-content/uploads
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123
+
