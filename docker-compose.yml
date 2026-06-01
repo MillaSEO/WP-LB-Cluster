@@ -23,9 +23,14 @@ services:
       WORDPRESS_DB_PASSWORD: 123
       WORDPRESS_DB_NAME: wordpress
       # Ключи лучше оставить, это хорошо для безопасности
+      AUTH_KEY: 'secret123'
+      SECURE_AUTH_KEY: 'secret123'
+      LOGGED_IN_KEY: 'secret123'
+    
+
     volumes:
       # Общая папка для картинок
-      - ./wp_shared_uploads:/var/www/html/wp-content/uploads
+      - ./wp_data:/var/www/html/wp-content/uploads
 
   wp2:
     image: wordpress:latest
@@ -35,9 +40,13 @@ services:
       WORDPRESS_DB_USER: user
       WORDPRESS_DB_PASSWORD: 123
       WORDPRESS_DB_NAME: wordpress
+      AUTH_KEY: 'secret123'
+      SECURE_AUTH_KEY: 'secret123'
+      LOGGED_IN_KEY: 'secret123'
+
     volumes:
-      # Та же самая папка на хосте — вот он, общий волюм!
-      - ./wp_shared_uploads:/var/www/html/wp-content/uploads
+      # общий волюм
+    - ./wp_data:/var/www/html/wp-content/uploads
 
   db:
     image: mysql:8.0
@@ -49,5 +58,5 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: 123
     volumes:
-      # КРИТИЧЕСКИ ВАЖНО: сохраняем базу данных на диск хоста
+      # сохранение БД на диск хоста
       - ./db_data:/var/lib/mysql
