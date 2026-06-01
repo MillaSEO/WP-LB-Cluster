@@ -5,7 +5,6 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       # Если сертификатов еще нет физически на диске, следующую строку лучше закомментировать:
@@ -29,8 +28,8 @@ services:
     
 
     volumes:
-      # Общая папка для картинок
-      - ./wp_data:/var/www/html/wp-content/uploads
+      # Общая папка для данных
+     - ./wp_data:/var/www/html
 
   wp2:
     image: wordpress:latest
@@ -46,7 +45,7 @@ services:
 
     volumes:
       # общий волюм
-    - ./wp_data:/var/www/html/wp-content/uploads
+    - ./wp_data:/var/www/html
 
   db:
     image: mysql:8.0
